@@ -25,5 +25,15 @@ export const dashboardService = {
   getMySummary: async (): Promise<{ success: boolean; data: DashboardSummary }> => {
     const { data } = await api.get('/dashboard/my-summary');
     return data;
+  },
+
+  getMyCategoryBreakdown: async (): Promise<{ success: boolean; data: CategoryBreakdown[] }> => {
+    const { data } = await api.get('/dashboard/my-categories');
+    return data;
+  },
+
+  getMyTrends: async (months: number = 6): Promise<{ success: boolean; data: TrendDataItem[] }> => {
+    const { data } = await api.get(`/dashboard/my-trends?months=${months}`);
+    return data;
   }
 };

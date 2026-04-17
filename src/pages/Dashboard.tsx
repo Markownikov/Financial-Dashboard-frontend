@@ -25,7 +25,10 @@ import {
 } from 'recharts';
 import './Dashboard.css';
 
+import { useAuth } from '../contexts/AuthContext';
+
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   const [summary, setSummary] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -34,11 +37,14 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
+      setIsLoading(true);
       try {
+        const isAnalyst = user?.role === 'ADMIN' || user?.role === 'ANALYST';
+        
         const [summaryRes, trendsRes, categoriesRes, recentRes] = await Promise.all([
-          dashboardService.getSummary(),
-          dashboardService.getTrends(6),
-          dashboardService.getCategoryBreakdown(),
+          isAnalyst ? dashboardService.getSummary() : dashboardService.getMySummary(),
+          isAnalyst ? dashboardService.getTrends(6) : dashboardService.getMyTrends(6),
+          isAnalyst ? dashboardService.getCategoryBreakdown() : dashboardService.getMyCategoryBreakdown(),
           dashboardService.getRecentActivity(5)
         ]);
 
@@ -53,8 +59,10 @@ const Dashboard: React.FC = () => {
       }
     };
 
-    fetchDashboardData();
-  }, []);
+    if (user) {
+      fetchDashboardData();
+    }
+  }, [user]);
 
   if (isLoading) return <Layout title="Dashboard"><div>Loading dashboard...</div></Layout>;
 
