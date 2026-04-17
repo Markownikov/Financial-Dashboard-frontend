@@ -94,6 +94,7 @@ const Register: React.FC = () => {
                 minLength={8}
               />
             </div>
+            <p className="field-hint">Min. 8 chars, 1 uppercase, 1 lowercase & 1 number</p>
           </div>
 
           <button type="submit" className="btn btn-primary auth-btn" disabled={isSubmitting}>

@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
+import TransactionModal from '../components/TransactionModal';
 import { transactionService } from '../api/transaction.service';
 import { 
   Plus, 
   Search, 
-  Filter, 
-  MoreVertical, 
   Trash2, 
-  RotateCcw,
+  Edit2,
   ChevronLeft,
-  ChevronRight,
-  TrendingDown,
-  ArrowUpRight
+  ChevronRight
 } from 'lucide-react';
 import './Transactions.css';
+
+const CATEGORIES = [
+  "SALARY", "FREELANCE", "INVESTMENTS", "RENT", "UTILITIES",
+  "GROCERIES", "TRANSPORTATION", "ENTERTAINMENT",
+  "HEALTHCARE", "EDUCATION", "OTHER",
+];
 
 const Transactions: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -25,6 +28,9 @@ const Transactions: React.FC = () => {
     category: '',
     search: ''
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
 
   const fetchTransactions = async () => {
     setIsLoading(true);
@@ -42,6 +48,16 @@ const Transactions: React.FC = () => {
   useEffect(() => {
     fetchTransactions();
   }, [page, filters]);
+
+  const handleCreate = () => {
+    setSelectedTransaction(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (txn: any) => {
+    setSelectedTransaction(txn);
+    setIsModalOpen(true);
+  };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this transaction?')) {
@@ -72,8 +88,18 @@ const Transactions: React.FC = () => {
             <option value="INCOME">Income</option>
             <option value="EXPENSE">Expense</option>
           </select>
+          <select 
+            value={filters.category}
+            onChange={(e) => setFilters({...filters, category: e.target.value})}
+            className="filter-select"
+          >
+            <option value="">All Categories</option>
+            {CATEGORIES.map(cat => (
+              <option key={cat} value={cat}>{cat.charAt(0) + cat.slice(1).toLowerCase()}</option>
+            ))}
+          </select>
         </div>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={handleCreate}>
           <Plus size={18} />
           <span>New Transaction</span>
         </button>
@@ -94,6 +120,8 @@ const Transactions: React.FC = () => {
           <tbody>
             {isLoading ? (
               <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
+            ) : transactions.length === 0 ? (
+              <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>No transactions found.</td></tr>
             ) : transactions.map((txn) => (
               <tr key={txn.id}>
                 <td>{txn.description}</td>
@@ -109,6 +137,9 @@ const Transactions: React.FC = () => {
                 </td>
                 <td>
                   <div className="action-btns">
+                    <button onClick={() => handleEdit(txn)} className="action-btn edit" title="Edit">
+                      <Edit2 size={16} />
+                    </button>
                     <button onClick={() => handleDelete(txn.id)} className="action-btn delete" title="Delete">
                       <Trash2 size={16} />
                     </button>
@@ -119,7 +150,7 @@ const Transactions: React.FC = () => {
           </tbody>
         </table>
         
-        {meta && (
+        {meta && meta.pagination.totalPages > 1 && (
           <div className="pagination">
             <button 
               disabled={!meta.pagination.hasPrevPage} 
@@ -141,6 +172,13 @@ const Transactions: React.FC = () => {
           </div>
         )}
       </div>
+
+      <TransactionModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={fetchTransactions}
+        transaction={selectedTransaction}
+      />
     </Layout>
   );
 };

@@ -34,4 +34,21 @@ api.interceptors.response.use(
   }
 );
 
+// Request interceptor for cleaning params
+api.interceptors.request.use((config) => {
+  if (config.params) {
+    const params = { ...config.params };
+    Object.keys(params).forEach((key) => {
+      // Remove empty strings, null, or undefined values
+      if (params[key] === '' || params[key] === null || params[key] === undefined) {
+        delete params[key];
+      }
+    });
+    config.params = params;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 export default api;
