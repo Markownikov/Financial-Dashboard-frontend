@@ -44,21 +44,6 @@
   --glass-bg: rgba(255, 255, 255, 0.8);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--font-family);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-
 a {
   color: var(--accent-primary);
   text-decoration: none;
