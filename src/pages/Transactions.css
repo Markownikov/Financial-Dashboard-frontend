@@ -1,0 +1,96 @@
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  width: 300px;
+  color: var(--text-secondary);
+}
+
+.search-box input {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th {
+  text-align: left;
+  padding: 1rem 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.transactions-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.action-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.4rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.action-btn.delete:hover {
+  color: var(--error);
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.pagination {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+}
+
+.page-info {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}

@@ -1,19 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions';
 import './index.css';
-
-// Lazy load pages later for better performance
-// For now, let's just create some placeholder components or actual pages
-const Login = () => <div className="p-10">Login Page</div>;
-const Register = () => <div className="p-10">Register Page</div>;
-const Dashboard = () => <div className="p-10">Dashboard Page</div>;
-const Transactions = () => <div className="p-10">Transactions Page</div>;
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { token, isLoading } = useAuth();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="loading-screen">Loading...</div>;
   if (!token) return <Navigate to="/login" replace />;
 
   return <>{children}</>;
@@ -21,8 +18,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -39,11 +36,10 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } />
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
